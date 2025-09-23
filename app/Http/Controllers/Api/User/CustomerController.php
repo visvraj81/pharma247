@@ -512,7 +512,7 @@ class CustomerController extends ResponseController
             // $customerEditData['gst_pan'] = isset($customerEdit->gst_pan) ? $customerEdit->gst_pan : '';
             $customerEditData['amount'] = isset($customerEdit->balance) ? $customerEdit->balance : '';
           
-            return $this->sendResponse($customerEditData, 'Data Fetch Successfully.');
+            return $this->sendResponse($customerEditData, 'Edit Time Customer Data Fetch Successfully.');
         } catch (\Exception $e) {
             Log::info("Edit Customer api" . $e->getMessage());
             return $e->getMessage();
