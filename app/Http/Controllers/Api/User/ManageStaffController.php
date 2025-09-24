@@ -17,25 +17,26 @@ use Illuminate\Support\Facades\Hash;
 class ManageStaffController extends ResponseController
 {
     //
-     public function mangeStaff(Request $request){
-         try{
+    public function mangeStaff(Request $request)
+    {
+        try {
 
             $validator = Validator::make($request->all(), [
                 'name' => 'required',
                 'mobile_no' => 'required',
                 'assgin_role' => 'required',
                 'email_id' => 'required',
-                'assgin_role'=>'required',
+                'assgin_role' => 'required',
                 'password' => 'required|confirmed',
                 'password_confirmation' => 'required'
             ], [
-                'name.required'=>'Please Enter Name',
-                'mobile_no.required'=>'Please Enter Mobile Number',
-                'assgin_role.required'=>'Please Enter Assgin Role',
-                'email_id.required'=>'Please Enter Email',
-                'assgin_role.required'=>'Please Enter Assgin Role',
-                'password.required'=>'Please Enter Password',
-                'password_confirmation.required'=>'Please Enter Password Confirmation',
+                'name.required' => 'Please Enter Name',
+                'mobile_no.required' => 'Please Enter Mobile Number',
+                'assgin_role.required' => 'Please Enter Assgin Role',
+                'email_id.required' => 'Please Enter Email',
+                'assgin_role.required' => 'Please Enter Assgin Role',
+                'password.required' => 'Please Enter Password',
+                'password_confirmation.required' => 'Please Enter Password Confirmation',
             ]);
 
             if ($validator->fails()) {
@@ -64,9 +65,8 @@ class ManageStaffController extends ResponseController
             $userStaff->new_password = $request->password;
             $userStaff->save();
 
-            return $this->sendResponse( [], 'Staff Added Successfully');
-
-          } catch (\Exception $e) {
+            return $this->sendResponse([], 'Staff Added Successfully.');
+        } catch (\Exception $e) {
             Log::info("Manage Staff api" . $e->getMessage());
             return $e->getMessage();
         }
@@ -74,30 +74,28 @@ class ManageStaffController extends ResponseController
 
     public function managelist(Request $request)
     {
-            try{
+        try {
 
-               $staffData = User::where('create_by',auth()->user()->id)->get();
+            $staffData = User::where('create_by', auth()->user()->id)->get();
 
-               $dataStaff = [];
-               if(isset( $staffData))
-               {
-                      foreach($staffData as $key => $listData)
-                      {
-                        $role = FrontRole::where('id',$listData->assgin_role)->first();
-                        $dataStaff[$key]['id'] = isset($listData->id) ? $listData->id :"";
-                        $dataStaff[$key]['name'] = isset($listData->name) ? $listData->name :"";
-                        $dataStaff[$key]['mobile_number'] = isset($listData->phone_number) ? $listData->phone_number :"";
-                        $dataStaff[$key]['status'] = isset($listData->status) ? $listData->status :"";
-                        
-                        $dataStaff[$key]['password'] = isset($listData->new_password) ? $listData->new_password :"";
-                        $dataStaff[$key]['role_name'] = isset($role->role) ? $role->role :"";
-                        $dataStaff[$key]['email_id'] = isset($listData->email) ? $listData->email :"";
-                        $dataStaff[$key]['role_id'] = isset($listData->assgin_role) ? $listData->assgin_role :"";
-                        $dataStaff[$key]['created_at'] = date("d-m-Y", strtotime($listData->created_at));
-                      }
-               }
-               return $this->sendResponse( $dataStaff, 'Data Fetch Successfully');
-           } catch (\Exception $e) {
+            $dataStaff = [];
+            if (isset($staffData)) {
+                foreach ($staffData as $key => $listData) {
+                    $role = FrontRole::where('id', $listData->assgin_role)->first();
+                    $dataStaff[$key]['id'] = isset($listData->id) ? $listData->id : "";
+                    $dataStaff[$key]['name'] = isset($listData->name) ? $listData->name : "";
+                    $dataStaff[$key]['mobile_number'] = isset($listData->phone_number) ? $listData->phone_number : "";
+                    $dataStaff[$key]['status'] = isset($listData->status) ? $listData->status : "";
+
+                    $dataStaff[$key]['password'] = isset($listData->new_password) ? $listData->new_password : "";
+                    $dataStaff[$key]['role_name'] = isset($role->role) ? $role->role : "";
+                    $dataStaff[$key]['email_id'] = isset($listData->email) ? $listData->email : "";
+                    $dataStaff[$key]['role_id'] = isset($listData->assgin_role) ? $listData->assgin_role : "";
+                    $dataStaff[$key]['created_at'] = date("d-m-Y", strtotime($listData->created_at));
+                }
+            }
+            return $this->sendResponse($dataStaff, 'Staff Data Fetch Successfully.');
+        } catch (\Exception $e) {
             Log::info("Manage Staff List api" . $e->getMessage());
             return $e->getMessage();
         }
@@ -105,12 +103,12 @@ class ManageStaffController extends ResponseController
 
     public function manageEdit(Request $request)
     {
-           try{
+        try {
 
             $validator = Validator::make($request->all(), [
                 'id' => 'required',
             ], [
-                'id.required'=>'Please Enter Id',
+                'id.required' => 'Please Enter Id',
             ]);
 
             if ($validator->fails()) {
@@ -118,44 +116,41 @@ class ManageStaffController extends ResponseController
                 return $this->sendError($error->first());
             }
 
-            $staffData = User::where('id',$request->id)->first();
-        
+            $staffData = User::where('id', $request->id)->first();
+
             $dataStaff = [];
-            if(isset($staffData))
-            {
-                $role = FrontRole::where('id',$staffData->assgin_role)->first();
-                $dataStaff['id'] = isset($staffData->id) ? $staffData->id :"";
-                $dataStaff['name'] = isset($staffData->name) ? $staffData->name :"";
-                $dataStaff['mobile_number'] = isset($staffData->phone_number) ? $staffData->phone_number :"";
-                $dataStaff['email_id'] = isset($staffData->email) ? $staffData->email :"";
-                $dataStaff['role_name'] = isset($role->role) ? $role->role :"";
+            if (isset($staffData)) {
+                $role = FrontRole::where('id', $staffData->assgin_role)->first();
+                $dataStaff['id'] = isset($staffData->id) ? $staffData->id : "";
+                $dataStaff['name'] = isset($staffData->name) ? $staffData->name : "";
+                $dataStaff['mobile_number'] = isset($staffData->phone_number) ? $staffData->phone_number : "";
+                $dataStaff['email_id'] = isset($staffData->email) ? $staffData->email : "";
+                $dataStaff['role_name'] = isset($role->role) ? $role->role : "";
                 $dataStaff['created_at'] = date("d-m-Y", strtotime($staffData->created_at));
             }
 
-            return $this->sendResponse( $dataStaff, 'Data Fetch Successfully');
+            return $this->sendResponse($dataStaff, 'Data Fetch Successfully.');
         } catch (\Exception $e) {
             Log::info("Manage Staff List api" . $e->getMessage());
             return $e->getMessage();
         }
     }
-    
+
     public function statusChange(Request $request)
     {
-         try{
-             
-            $userData = User::where('id',$request->id)->first();
-            if(isset( $userData))
-            {
-                if( $userData->status == '1')
-                {
+        try {
+
+            $userData = User::where('id', $request->id)->first();
+            if (isset($userData)) {
+                if ($userData->status == '1') {
                     $userData->status = '0';
-                }else{
+                } else {
                     $userData->status = '1';
                 }
                 $userData->update();
             }
-             return $this->sendResponse( [], 'Status Change Successfully');
-         } catch (\Exception $e) {
+            return $this->sendResponse([], 'Status Change Successfully.');
+        } catch (\Exception $e) {
             Log::info("Manage Staff Status Change api" . $e->getMessage());
             return $e->getMessage();
         }
@@ -163,7 +158,7 @@ class ManageStaffController extends ResponseController
 
     public function manageUpdate(Request $request)
     {
-        try{
+        try {
 
             $validator = Validator::make($request->all(), [
                 'id' => 'required',
@@ -171,18 +166,18 @@ class ManageStaffController extends ResponseController
                 'mobile_no' => 'required',
                 'assgin_role' => 'required',
                 'email_id' => 'required',
-                'assgin_role'=>'required',
+                'assgin_role' => 'required',
                 'password' => 'required|confirmed',
                 'password_confirmation' => 'required'
             ], [
-                'id.required'=>'Please Enter Id',
-                'name.required'=>'Please Enter Name',
-                'mobile_no.required'=>'Please Enter Mobile Number',
-                'assgin_role.required'=>'Please Enter Assgin Role',
-                'email_id.required'=>'Please Enter Email',
-                'assgin_role.required'=>'Please Enter Assgin Role',
-                'password.required'=>'Please Enter Password',
-                'password_confirmation.required'=>'Please Enter Password Confirmation',
+                'id.required' => 'Please Enter Id',
+                'name.required' => 'Please Enter Name',
+                'mobile_no.required' => 'Please Enter Mobile Number',
+                'assgin_role.required' => 'Please Enter Assgin Role',
+                'email_id.required' => 'Please Enter Email',
+                'assgin_role.required' => 'Please Enter Assgin Role',
+                'password.required' => 'Please Enter Password',
+                'password_confirmation.required' => 'Please Enter Password Confirmation',
             ]);
 
             if ($validator->fails()) {
@@ -190,10 +185,9 @@ class ManageStaffController extends ResponseController
                 return $this->sendError($error->first());
             }
 
-            $userStaff = User::where('id',$request->id)->first();
-          
-            if(isset($userStaff))
-            {
+            $userStaff = User::where('id', $request->id)->first();
+
+            if (isset($userStaff)) {
                 $userStaff->name = $request->name;
                 $userStaff->create_by = auth()->user()->id;
                 $userStaff->phone_number = $request->mobile_no;
@@ -204,9 +198,8 @@ class ManageStaffController extends ResponseController
                 $userStaff->update();
             }
 
-            return $this->sendResponse( [], 'Staff Updated Successfully');
-
-          } catch (\Exception $e) {
+            return $this->sendResponse([], 'Staff Updated Successfully');
+        } catch (\Exception $e) {
             Log::info("Manage Staff api" . $e->getMessage());
             return $e->getMessage();
         }
