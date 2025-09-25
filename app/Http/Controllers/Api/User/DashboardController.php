@@ -512,7 +512,8 @@ class DashboardController extends ResponseController
     {
         $purchase = $this->getTotalsAndCounts(PurchesModel::class, 'bill_date', $startDate, $endDate, $userId, 'net_amount'); // Ensure 'net_amount' is correct
         $purchaseReturn = $this->getTotalsAndCounts(PurchesReturn::class, 'select_date', $startDate, $endDate, $userId, 'net_amount'); // Ensure 'net_amount' is correct
-        $sales = $this->getTotalsAndCounts(SalesModel::class, 'bill_date', $startDate, $endDate, $userId, 'net_amt'); // Ensure 'net_amt' is correct
+        // $sales = $this->getTotalsAndCounts(SalesModel::class, 'bill_date', $startDate, $endDate, $userId, 'net_amt'); // Ensure 'net_amt' is correct
+      	$sales = $this->getTotalsAndCounts(SalesModel::class, 'bill_date', $startDate, $endDate, $userId, 'mrp_total'); // Ensure 'mrp_total' is correct
         $salesReturn = $this->getTotalsAndCounts(SalesReturn::class, 'date', $startDate, $endDate, $userId, 'net_amount'); // Ensure 'net_amount' is correct
 
         return [
