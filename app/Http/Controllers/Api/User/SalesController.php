@@ -538,7 +538,6 @@ class SalesController extends ResponseController
 
             return $this->sendResponse('', 'Sales Added Iteam Successfully');
         } catch (\Exception $e) {
-
             Log::info("create sales api" . $e->getMessage());
             return $e->getMessage();
         }
@@ -1920,28 +1919,27 @@ class SalesController extends ResponseController
                 // $legaderDetails  = LedgerModel::where('iteam_id',$salesIteam->item_id)->where('user_id',auth()->user()->id)->orderBy('id')->get();
 
                 // if(isset($legaderDetails))
-                //{
-                //  $prevStock = null;
-                // foreach($legaderDetails as $ListData)
-                // {
+                //	{
+                //  	$prevStock = null;
+                // 	foreach($legaderDetails as $ListData)
+                // 	{
                 //         if ($prevStock !== null) {
                 //           if($prevStock->in)
                 //         {
                 //          $amount =  $ListData->in - $prevStock->balance_stock;
                 //         $ListData->balance_stock = abs($amount);
-                //     }else{
-                //     $amount = $ListData->out - $prevStock->balance_stock;
-                //   $ListData->balance_stock = abs($amount); 
-                // }
-                // } else {
-                //   $ListData->balance_stock = $ListData->out ?? 0;
+                //     }	else{
+                //     	$amount = $ListData->out - $prevStock->balance_stock;
+                //   	$ListData->balance_stock = abs($amount); 
+                // 		}
+                // 	} else {
+                //   	$ListData->balance_stock = $ListData->out ?? 0;
+                //	}
+                //		$ListData->update();
+                //		$prevStock = $ListData;
+                //	}
                 //}
-                //$ListData->update();
-                //$prevStock = $ListData;
-                //}
-                //}
-
-
+              
                 $salesIteam->delete();
             }
 
@@ -2080,6 +2078,9 @@ class SalesController extends ResponseController
             $salesDataData = SalesModel::where('user_id', auth()->user()->id)->orderByDesc('id')->first();
 
             $salesSgst = (string)array_sum($withoutGst);
+          
+          	$salesFinalAmount = (float) array_sum($netRate);
+			$totalGst    = round($totalGst, 0);
 
             $dataList = [
                 'total_qty' => (string)$qtyDataTotal,
@@ -2089,7 +2090,8 @@ class SalesController extends ResponseController
                 'sales_item' => $salesDetails,
                 'today_loylti_point' => (string)round($loyaltyPointsEarned, 2),
                 'sales_amount' => (string)array_sum($netRate),
-                'total_base' => (string)array_sum($baseTotal),
+              	'total_base'         => (string)($salesFinalAmount - $totalGst),
+                //'total_base' => (string)array_sum($baseTotal),
                 'total_net_rate' => (string)array_sum($totalRate),
                 'last_bill_date' => isset($salesDataData) ? date('Y-m-d h:i A', strtotime($salesDataData->created_at)) : '',
                 'sgst' => round($salesSgst / 2),
